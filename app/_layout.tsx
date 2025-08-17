@@ -1,29 +1,48 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { useFonts } from "expo-font";
+import { SplashScreen, Stack } from "expo-router";
+import { useEffect } from "react";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import TimerProvider from "../context/TimerContext";
+import "../styles/globals.css";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+// this will prevent the flash screen from auto hiding until loading all the assets is complete
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+	const [fontsLoaded, fontError] = useFonts({
+		"Roboto-Mono": require("../assets/fonts/RobotoMono-Regular.ttf"),
+	});
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+	useEffect(() => {
+		if (fontError) throw fontError;
+		if (fontsLoaded) {
+			SplashScreen.hideAsync();
+		}
+	}, [fontsLoaded, fontError]);
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+	if (!fontsLoaded) {
+		return null;
+	}
+
+	if (!fontsLoaded && !fontError) {
+		return null;
+	}
+
+	return (
+		<SafeAreaProvider>
+			<TimerProvider>
+				<Stack screenOptions={{ headerShown: false }}>
+					<Stack.Screen name="index" options={{}} />
+					{/* <Stack.Screen name="(tabs)" options={{}} /> */}
+					<Stack.Screen name="meditate/[id]" options={{}} />
+					<Stack.Screen
+						name="(modal)/adjust-meditation-duration"
+						options={{ presentation: "modal" }}
+					/>
+				</Stack>
+			</TimerProvider>
+			<StatusBar style="light" />
+		</SafeAreaProvider>
+	);
 }
