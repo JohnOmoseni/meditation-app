@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { ImageBackground, Pressable, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { Audio } from "expo-av";
-
+import { useAudioPlayer } from "expo-audio";
 import { AUDIO_FILES, MEDITATION_DATA } from "@/constants/data";
 import { MEDITATION_IMAGES } from "@/constants/icons";
 import { CustomButton } from "@/components/reuseables/CustomButton";
@@ -12,81 +11,71 @@ import { CustomText } from "@/components/reuseables/themed-element/ThemedText";
 import { COLORS } from "@/constants/colors";
 import AppGradient from "../_components/AppGradient";
 
-const Page = () => {
+export default function Page() {
 	const { id } = useLocalSearchParams();
 	const { duration: secondsRemaining, setDuration } = useTimerContext();
 
 	const [isMeditating, setMeditating] = useState(false);
-	const [audioSound, setSound] = useState<Audio.Sound>();
-	const [isPlayingAudio, setPlayingAudio] = useState(false);
 
+	// Initialize audio player
+	const audioSource = AUDIO_FILES[MEDITATION_DATA[Number(id) - 1].audio];
+	const audioPlayer = useAudioPlayer(audioSource);
+
+	const isPlayingAudio = audioPlayer.playing;
+
+	// Timer logic
 	useEffect(() => {
 		if (!isMeditating) return;
 
 		if (secondsRemaining === 0) {
 			if (isPlayingAudio) {
-				audioSound?.pauseAsync();
+				audioPlayer.pause();
 			}
 			setMeditating(false);
-			setPlayingAudio(false);
 			return;
 		}
 
-		const timerId = setTimeout(() => {
+		const timer = setTimeout(() => {
 			setDuration(secondsRemaining - 1);
 		}, 1000);
 
-		return () => clearTimeout(timerId);
-	}, [secondsRemaining, isMeditating, isPlayingAudio, audioSound]);
+		return () => clearTimeout(timer);
+	}, [
+		secondsRemaining,
+		isMeditating,
+		isPlayingAudio,
+		audioPlayer,
+		setDuration,
+	]);
 
+	// Reset when unmounting
 	useEffect(() => {
 		return () => {
 			setDuration(10);
-			audioSound?.unloadAsync();
+			// audioPlayer.seekTo(0);
+			// audioPlayer.pause();
 		};
-	}, [audioSound]);
+	}, [audioPlayer, setDuration]);
 
-	const initializeSound = async () => {
-		const audioFileName = MEDITATION_DATA[Number(id) - 1].audio;
-
-		const { sound } = await Audio.Sound.createAsync(AUDIO_FILES[audioFileName]);
-		setSound(sound);
-		return sound;
-	};
-
-	const togglePlayPause = async () => {
-		const sound = audioSound ? audioSound : await initializeSound();
-
-		const status = await sound?.getStatusAsync();
-
-		if (status?.isLoaded && !isPlayingAudio) {
-			await sound?.playAsync();
-			setPlayingAudio(true);
-		} else {
-			await sound?.pauseAsync();
-			setPlayingAudio(false);
-		}
-	};
-
-	async function toggleMeditationSessionStatus() {
+	const toggleMeditationSessionStatus = () => {
 		if (secondsRemaining === 0) setDuration(10);
 
 		setMeditating(!isMeditating);
 
-		await togglePlayPause();
-	}
+		if (isPlayingAudio) {
+			audioPlayer.pause();
+		} else {
+			audioPlayer.play();
+		}
+	};
 
 	const handleAdjustDuration = () => {
 		if (isMeditating) toggleMeditationSessionStatus();
-
 		router.push("/(modal)/adjust-meditation-duration");
 	};
 
-	// Format the timeLeft to ensure two digits are displayed
-	const formattedTimeMinutes = String(
-		Math.floor(secondsRemaining / 60)
-	).padStart(2, "0");
-	const formattedTimeSeconds = String(secondsRemaining % 60).padStart(2, "0");
+	const minutes = String(Math.floor(secondsRemaining / 60)).padStart(2, "0");
+	const seconds = String(secondsRemaining % 60).padStart(2, "0");
 
 	return (
 		<View className="flex-1">
@@ -105,8 +94,8 @@ const Page = () => {
 
 					<View className="flex-1 justify-center">
 						<View className="mx-auto bg-white rounded-full size-44 row-flex">
-							<CustomText type="title" className="text-blue-800">
-								{formattedTimeMinutes}.{formattedTimeSeconds}
+							<CustomText type="title" className="text-red-800">
+								{minutes}.{seconds}
 							</CustomText>
 						</View>
 					</View>
@@ -126,6 +115,4 @@ const Page = () => {
 			</ImageBackground>
 		</View>
 	);
-};
-
-export default Page;
+}

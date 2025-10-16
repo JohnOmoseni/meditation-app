@@ -12,7 +12,7 @@ const AppGradient = ({
 	colors: readonly [ColorValue, ColorValue, ...ColorValue[]];
 }) => {
 	return (
-		<LinearGradient colors={colors} style={styles.container} {...rest}>
+		<LinearGradient colors={colors} style={styles.container}>
 			<SafeAreaView className="flex-1 px-5 py-3 relative">
 				{children}
 			</SafeAreaView>

@@ -6,9 +6,11 @@ import { router, useLocalSearchParams } from "expo-router";
 import { View, ImageBackground, Pressable, ScrollView } from "react-native";
 import { COLORS } from "@/constants/colors";
 import { CustomText } from "@/components/reuseables/themed-element/ThemedText";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const AffirmationPractice = () => {
 	const { id } = useLocalSearchParams();
+	const insets = useSafeAreaInsets();
 
 	const [affirmation, setAffirmation] = useState<GalleryPreviewDataType>();
 	const [sentences, setSentences] = useState<string[]>([]);
@@ -47,12 +49,13 @@ const AffirmationPractice = () => {
 				<AppGradient colors={["rgba(0,0,0,0.3)", "rgba(0,0,0,0.9)"]}>
 					<Pressable
 						onPress={() => router.back()}
+						style={{ paddingTop: insets.top }}
 						className="absolute top-4 left-4 z-10"
 					>
 						<AntDesign name="leftcircleo" size={50} color={COLORS.white} />
 					</Pressable>
 
-					<ScrollView className="mt-20" showsVerticalScrollIndicator={false}>
+					<ScrollView className="mt-32" showsVerticalScrollIndicator={false}>
 						<View className="h-full justify-center">
 							<View className="h-4/5 justify-center">
 								{sentences.map((sentence, idx) => (

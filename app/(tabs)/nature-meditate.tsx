@@ -5,10 +5,10 @@ import { images, MEDITATION_IMAGES } from "@/constants/icons";
 import { CustomText } from "@/components/reuseables/themed-element/ThemedText";
 import { MEDITATION_DATA } from "@/constants/data";
 import { LinearGradient } from "expo-linear-gradient";
+import { cn } from "@/lib/utlis";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import AppGradient from "../_components/AppGradient";
-import { cn } from "@/lib/utlis";
 
 const App = () => {
 	const router = useRouter();
@@ -22,12 +22,11 @@ const App = () => {
 				className="flex-1"
 			>
 				<AppGradient
-					// Background Linear Gradient
-					// colors={["#161b2e", "#0a4d4a", "#766e67"]}
-					colors={["rgba(0,0,0,0.4)", "rgba(0,0,0,0.8)"]}
+					colors={["#161b2e", "#0a4d4a", "#766e67"]}
+					// colors={["rgba(0,0,0,0.4)", "rgba(0,0,0,0.8)"]}
 				>
 					<Animated.View
-						className="mt-3"
+						className="mt-3 mb-4"
 						entering={FadeInDown.delay(300)
 							.mass(0.5)
 							.stiffness(80)
@@ -38,7 +37,7 @@ const App = () => {
 						</CustomText>
 
 						<CustomText type="subtitle" className="mt-2 pl-1">
-							Start yout meditation practice today
+							Start your meditation practice today
 						</CustomText>
 					</Animated.View>
 
@@ -46,14 +45,9 @@ const App = () => {
 						data={MEDITATION_DATA}
 						keyExtractor={(item) => item.id.toString()}
 						showsVerticalScrollIndicator={false}
-						// contentContainerClassName={cn("pt-4", `mb-[${insets.bottom}]`, {
-						// 	"pb-20": insets.bottom !== 0,
-						// })}
-						contentContainerStyle={{
-							paddingTop: 20,
-							marginBottom: 100,
-							// paddingBottom: insets.bottom !== 0 ? 200 : 0,
-						}}
+						contentContainerClassName={cn("pt-4", {
+							"pb-24": insets.bottom !== 0,
+						})}
 						renderItem={({ item }) => (
 							<Pressable
 								onPress={() => router.push(`/meditate/${item.id}`)}

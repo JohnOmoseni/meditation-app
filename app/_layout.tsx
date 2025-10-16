@@ -3,7 +3,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import TimerProvider from "../context/TimerContext";
+import TimerProvider from "@/context/TimerContext";
 import "../styles/globals.css";
 
 // this will prevent the flash screen from auto hiding until loading all the assets is complete
@@ -12,6 +12,11 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
 	const [fontsLoaded, fontError] = useFonts({
 		"Roboto-Mono": require("../assets/fonts/RobotoMono-Regular.ttf"),
+		"Quicksand-Bold": require("../assets/fonts/Quicksand-Bold.ttf"),
+		"Quicksand-Medium": require("../assets/fonts/Quicksand-Medium.ttf"),
+		"Quicksand-Regular": require("../assets/fonts/Quicksand-Regular.ttf"),
+		"Quicksand-Light": require("../assets/fonts/Quicksand-Light.ttf"),
+		"Quicksand-SemiBold": require("../assets/fonts/Quicksand-SemiBold.ttf"),
 	});
 
 	useEffect(() => {

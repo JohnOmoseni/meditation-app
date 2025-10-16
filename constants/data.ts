@@ -1,4 +1,4 @@
-import { images } from "@/constants/icons";
+import { images } from "./icons";
 
 export type GalleryPreviewDataType = {
 	id: number;

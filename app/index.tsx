@@ -1,9 +1,9 @@
 import React from "react";
 import { View, ImageBackground, Text } from "react-native";
 import { useRouter } from "expo-router";
-import { images } from "@/constants/icons";
 import { CustomButton } from "@/components/reuseables/CustomButton";
 import { CustomText } from "@/components/reuseables/themed-element/ThemedText";
+import { images } from "@/constants/icons";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import AppGradient from "./_components/AppGradient";
 
@@ -46,7 +46,7 @@ const App = () => {
 							<CustomButton
 								onPress={() => router.push("/nature-meditate")}
 								title="Get Started"
-								containerClassName="mb-5"
+								containerClassName="android:mb-6 ios:mb-5"
 							/>
 						</Animated.View>
 					</View>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import { cn } from "@/lib/utlis";
 import { CustomText } from "@/components/reuseables/themed-element/ThemedText";
 
@@ -18,7 +18,12 @@ type TabBarIconProps = {
 };
 
 const TabBarIcon = ({ focused, icon, color, title }: TabBarIconProps) => (
-	<View className="min-w-20 items-center justify-between h-full gap-1 absolute mt-2.5">
+	<View
+		className={cn(
+			"w-max items-center justify-between h-full gap-0.5 absolute mt-3",
+			title === "Affirmations" && "pr-5"
+		)}
+	>
 		{/* <Image
 			source={icon}
 			className="size-7"
@@ -31,7 +36,7 @@ const TabBarIcon = ({ focused, icon, color, title }: TabBarIconProps) => (
 			style={{
 				color: focused ? color : "#5D5F6D",
 			}}
-			className={cn("font-bold text-center w-full")}
+			className={cn("text-center w-full", focused && "font-bold")}
 		>
 			{title}
 		</CustomText>
@@ -41,19 +46,21 @@ const TabBarIcon = ({ focused, icon, color, title }: TabBarIconProps) => (
 const TabsLayout = () => {
 	return (
 		<Tabs
+			safeAreaInsets={{ top: 0, bottom: 30 }}
 			screenOptions={{
 				headerShown: false,
 				tabBarShowLabel: false,
+
 				tabBarStyle: {
 					borderTopLeftRadius: 50,
 					borderTopRightRadius: 50,
 					borderBottomLeftRadius: 50,
 					borderBottomRightRadius: 50,
 					marginHorizontal: 50,
-					paddingRight: 20,
-					height: 80,
 					position: "absolute",
-					bottom: 35,
+					paddingRight: 4,
+					height: Platform.OS === "ios" ? 80 : 75,
+					bottom: Platform.OS === "ios" ? 35 : 50,
 					backgroundColor: "white",
 					shadowColor: "#1a1a1a",
 					shadowOffset: { width: 0, height: 2 },
@@ -67,14 +74,6 @@ const TabsLayout = () => {
 				name="nature-meditate"
 				options={{
 					title: "Meditate",
-					// tabBarIcon: ({ color, focused }) => (
-					// 	<MaterialCommunityIcons
-					// 		name="flower-tulip"
-					// 		size={24}
-					// 		color={color}
-					// 	/>
-					// ),
-
 					tabBarIcon: ({ focused, color }) => (
 						<TabBarIcon
 							title="Home"

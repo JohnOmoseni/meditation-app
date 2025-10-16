@@ -6,9 +6,11 @@ import { useTimerContext } from "../../context/TimerContext";
 import { COLORS } from "@/constants/colors";
 import { CustomButton } from "@/components/reuseables/CustomButton";
 import { CustomText } from "@/components/reuseables/themed-element/ThemedText";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AppGradient from "../_components/AppGradient";
 
 const AdjustMeditationDuration = () => {
+	const insets = useSafeAreaInsets();
 	const { setDuration } = useTimerContext();
 
 	const handlePress = (duration: number) => {
@@ -21,15 +23,19 @@ const AdjustMeditationDuration = () => {
 			<AppGradient colors={["#161b2e", "#0a4d4a", "#766e67"]}>
 				<Pressable
 					onPress={() => router.back()}
-					className="absolute top-8 left-6 z-10"
+					style={{ paddingTop: insets.top }}
+					className="absolute ios:top-10 android:top-14 left-6 z-10"
 				>
 					<AntDesign name="leftcircleo" size={50} color={COLORS.white} />
 				</Pressable>
 
-				<View className="justify-center h-4/5">
-					<CustomText type="subtitle" className="text-center mb-8">
-						Adjust your meditation duration Change your beliefs with
-						affirmations
+				<View className="justify-center ios:h-4/5 android:h-full">
+					<CustomText type="subtitle" className="text-center">
+						Adjust your meditation duration
+					</CustomText>
+
+					<CustomText type="subtitle" className="text-center mb-12">
+						Change your beliefs with affirmations
 					</CustomText>
 
 					<View>

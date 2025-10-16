@@ -20,12 +20,12 @@ const Page = () => {
 							.stiffness(80)
 							.springify(20)}
 					>
-						<CustomText type="secondary" className="">
+						<CustomText type="secondary" className="mt-3">
 							Change your beliefs with affirmations
 						</CustomText>
 					</Animated.View>
 
-					<View className="mt-4">
+					<View className="mt-4" style={{ marginBottom: insets.bottom + 50 }}>
 						{AFFIRMATION_GALLERY.map((g) => (
 							<GuidedAffirmationsGallery
 								key={g.title}

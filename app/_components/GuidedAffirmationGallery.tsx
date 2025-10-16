@@ -25,9 +25,8 @@ const GuidedAffirmationsGallery = ({
 					showsHorizontalScrollIndicator={false}
 					keyExtractor={(item) => item.id.toString()}
 					renderItem={({ item, index }) => (
-						// <Link key={index} href={`/affirmations/${item.id}`} asChild>
-						<Link key={index} href={`/`} asChild>
-							<Pressable className="h-36 w-46 rounded-md mr-4 overflow-hidden">
+						<Link key={index} href={`/affirmations/${item.id}`} asChild>
+							<Pressable className="h-36 w-40 rounded-md mr-4 overflow-hidden">
 								<Image
 									source={item.image}
 									resizeMode="cover"

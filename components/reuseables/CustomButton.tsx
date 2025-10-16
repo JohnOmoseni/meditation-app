@@ -2,9 +2,9 @@ import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Pressable } from "react-native";
 import { CustomText, TextClassContext } from "./themed-element/ThemedText";
+import { COLORS } from "@/constants/colors";
 import cn from "clsx";
 import React, { ReactNode } from "react";
-import { COLORS } from "@/constants/colors";
 
 const buttonVariants = cva("group row-flex", {
 	variants: {
